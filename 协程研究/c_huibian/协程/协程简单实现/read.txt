@@ -1,0 +1,12 @@
+### save_restore_test
+
+as --64 -o save_restore.o save_restore.s
+gcc -c test_save_restore.c -o test_save_restore.o
+gcc -o a.out save_restore.o test_save_restore.o
+./a.out
+
+### uthread_test
+as --64 -o save_restore.o save_restore.s
+gcc -c uthread.c  -o uthread.o
+gcc -o a.out save_restore.o uthread.o
+./a.out
