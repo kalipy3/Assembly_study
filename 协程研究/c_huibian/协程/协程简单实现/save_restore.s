@@ -3,13 +3,13 @@
 # as --64 -o save_restore.o save_restore.s
 .global save, restore
 save:
-	leaq 8(%rsp), %rdx
+	leaq 8(%rsp), %rdx#retq执行后rsp的位置
 	movq %rdx, (0)(%rdi)
 	movq %rbp, (8)(%rdi)
 	# 下面这个(%rsp)取当前rsp处的值，它是谁？它是call save时压栈的save函数返回地址啊！这是关键！
 	# 返回地址保存到参数的第三个8字节处，即rip字段！修改它即修改save从restore返回的地址。
 	movq (%rsp), %rdx		
-	movq %rdx, (16)(%rdi)
+	movq %rdx, (16)(%rdi)#由于寻址不能内存单元到内存单元，所以借助rdx中转
 	movq %r12, (24)(%rdi)
 	movq %r13, (32)(%rdi)
 	movq %r14, (40)(%rdi)
@@ -39,3 +39,7 @@ restore:
 #	unsigned long r14;
 #	unsigned long r15;
 #};
+
+#leaq 8(%rsp), %rdx和movq 8(%rsp), %rdx区别：
+#前者是把rsp地址+8赋值给rdx
+#后者是把rsp地址+8内存单元处的内容赋值给rdx
